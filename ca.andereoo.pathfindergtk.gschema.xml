@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="ca.andereoo.pathfindergtk" path="/ca/andereoo/pathfindergtk/">
+      <key type="s" name="path-left">
+          <default>""</default>
+          <summary>A path to the original folder</summary>
+          <description>Folder that has been backed up and needs to be checked.</description>
+      </key>
+      <key type="s" name="path-right">
+          <default>""</default>
+          <summary>A path to the backup folder</summary>
+          <description>Backup folder that needs to be checked.</description>
+      </key>
+      <key type="b" name="auto-update">
+          <default>false</default>
+          <summary>Determines whether the view should automatically update</summary>
+          <description>Automatically update the view when a new folder is selected.</description>
+      </key>
+      <key type="b" name="show-all">
+          <default>false</default>
+          <summary>Determines whether the view should show all files</summary>
+          <description>If false, only files or folders that are not common to both directories will be shown. Only recommended to be used for testing purposes.</description>
+      </key>
+      <key type="b" name="view-files">
+          <default>true</default>
+          <summary>Determines whether the file viewer should be open</summary>
+          <description>If true, file changes will be shown in the sidebar whenever possible.</description>
+      </key>
+      <key type="i" name="default-height">
+          <default>600</default>
+          <summary>The height of the window</summary>
+          <description>The height of the main window in pixels.</description>
+      </key>
+      <key type="i" name="default-width">
+          <default>800</default>
+          <summary>The width of the window</summary>
+          <description>The width of the main window in pixels</description>
+      </key>
+      <key type="b" name="is-maximized">
+          <default>false</default>
+          <summary>A flag to enable maximized mode</summary>
+          <description>If “true”, the main window starts in maximized mode.</description>
+      </key>
+      <key type="i" name="sidebar-width">
+          <default>400</default>
+          <summary>The width of the folder browser</summary>
+          <description>Sets the width of the sidebar by altering the default position of the pane.</description>
+      </key>
+  </schema>
+</schemalist>

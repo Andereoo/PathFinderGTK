@@ -1,0 +1,70 @@
+.mybtn {color: yellow; background: green;}
+
+listview, .view {
+      padding-top: 5px;
+      padding-bottom: 5px;
+}
+
+.sourceview {
+      /* margin-left: 5px; */
+      margin-right: 5px;
+      font-family: Monospace; 
+}
+
+separator {
+      margin-top: 5px;
+      margin-bottom: 5px;
+}
+
+row {
+      padding-right: 0;
+}
+
+.missing {
+      color: @destructive_color;
+}
+
+.accent-button {
+      background-color: @accent_bg_color;
+      color: @accent_fg_color;
+      padding: 10px;
+      border-radius: 5px;
+}
+.success-button {
+      background-color: @success_bg_color;
+      color: @success_fg_color;
+      padding: 10px;
+      border-radius: 5px;
+}
+.missing-button {
+      background-color: @destructive_bg_color;
+      color: @destructive_fg_color;
+      padding: 10px;
+      border-radius: 5px;
+}
+.warning-button {
+      background-color: @warning_bg_color;
+      color: @warning_fg_color;
+      padding: 10px;
+      border-radius: 5px;
+}
+.bottom_bar {
+      margin: 5px;
+}
+.bottom_bar label {
+      margin-left: 1px;
+}
+
+.picture-container {
+      margin: 10px;
+}
+.picture-top {
+      border: 2px solid @warning_bg_color;
+      border-radius: 10px;  
+      background-color: @headerbar_bg_color;
+}
+.picture-bottom {
+      border: 2px solid @destructive_bg_color;
+      border-radius: 10px;  
+      background-color: @headerbar_bg_color;
+}
