@@ -16,7 +16,7 @@ CHANGE_RIGHT = ("Only in backup", "missing", "missing-button")
 CHANGE_UNKNOWN = ("", "file-change-unknown", "file-change-unknown")
 SCHEMA_ID = "ca.andereoo.pathfindergtk"
 SCHEMA_PATH = "/usr/share/glib-2.0/schemas/"
-UPDATE_SCHEMA = True
+UPDATE_SCHEMA = False
 
 APPLICATION_PATH = os.path.abspath(os.path.dirname(__file__))
 LICENSE = Gtk.License.GPL_3_0
@@ -466,6 +466,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
         self.no_results = True
         self.sidebar_should_show = False
+        self.searching = False
 
         self.set_icon_name(ICON)
 
@@ -636,22 +637,37 @@ class MainWindow(Gtk.ApplicationWindow):
                 threading.Thread(target=lambda path=selected.alternate_path: show_file(path)).start()  
 
     def on_response(self, dialog, response_id):
+        dialog.close()
+        if len(threading.enumerate()) == 1:
+            self.master_container.append(self.footer_bar)
+            self.spinner.start()
+        thread = threading.Thread(target=lambda dialog=dialog, response_id=response_id: self.continue_response(dialog, response_id), daemon=True)
+        thread.start()
+        
+    def continue_response(self, dialog, response_id):
         selected = self.file_browser.right_clicked_item
-
+        prev = self.bottom_label.get_label()
+        
         if response_id == Gtk.ResponseType.YES or response_id == 1:
+            GLib.idle_add(lambda path=selected.path: self.bottom_label.set_label("Resolving " + path))
             self.file_browser.remove_item(selected)
             if os.path.isfile(selected.path):
                 shutil.copy2(selected.path, os.path.dirname(selected.alternate_path))
             else:
                 shutil.copytree(selected.path, selected.alternate_path)
         elif response_id == 2:
+            GLib.idle_add(lambda path=selected.alternate_path: self.bottom_label.set_label("Resolving " + path))
             self.file_browser.remove_item(selected)
             if os.path.isfile(selected.alternate_path):
                 shutil.copy2(selected.alternate_path, os.path.dirname(selected.path))
             else:
                 shutil.copytree(selected.alternate_path, selected.path)
 
-        dialog.close()
+        if len(threading.enumerate()) == 2:
+            self.master_container.remove(self.footer_bar)
+            self.spinner.stop()
+        if self.searching:
+            GLib.idle_add(lambda prev=prev: self.bottom_label.set_label(prev))            
 
     def simplify_path(self, folder, path):
         if len(path) > 1:
@@ -783,11 +799,13 @@ class MainWindow(Gtk.ApplicationWindow):
 
         self.master_container.remove(self.footer_bar)
         self.spinner.stop()
+        self.searching = False
     
     def finish_invalid_scan(self):
         self.content_pane.set_start_child(self.invalid_action_container)
         self.master_container.remove(self.footer_bar)
         self.spinner.stop()
+        self.searching = False
 
     def begin_scanning(self):
         try:
@@ -867,9 +885,9 @@ class MainWindow(Gtk.ApplicationWindow):
             self.content_pane.set_end_child(None)
             self.file_browser.store.remove_all()
             self.spinner.start()
+            self.searching = True
 
-            thread = threading.Thread(target=self.begin_scanning)
-            thread.daemon = True
+            thread = threading.Thread(target=self.begin_scanning, daemon = True)
             thread.start()
 
 class MyApp(Adw.Application):
